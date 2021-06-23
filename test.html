@@ -1,0 +1,141 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+	<title>Whatever</title>
+	<style>
+		html, body {
+			height: 100%;
+      margin:0px;
+		}
+		@media (max-width: 984px) {
+			html, body {
+				height: unset;
+			}
+      main {
+				width: 100%;
+				margin: 0;
+				height: unset;
+			}
+      .container {
+				width: 100%;
+				flex-direction: column;
+				justify-content: start;
+				align-items: center;
+			}
+		}
+    @media (max-width: 700px) {		
+			.chart_container {
+				width: 100%;
+				background-color: #edc980;
+				display: flex;
+				flex-wrap: wrap;
+				justify-content: space-around;
+				align-items: center;
+			}
+		}
+		body {
+			background-color: #ed8c8c;
+		}
+		* {
+			box-sizing:  border-box;
+		}
+		main {
+			height: 100%;
+			background-color: white;
+			position: absolute;
+			top: 0;
+			left: 0;
+			width: 256px;
+			margin: 0;
+			margin-right: calc(100% - 256px);
+			overflow: visible;
+			display: flex;
+			flex-direction: column;
+			justify-content: space-between;
+		}
+		.container {
+			left: 0;
+			width: 98vw;
+			display: flex;
+			justify-content: space-between;
+		}
+		.form {
+			width: 256px;
+			padding: 1rem;
+		}
+		.vl {
+			padding: 0;
+			margin: 0;
+		}
+		.chart_container {
+			max-width: 768px;
+			background-color: #edc980;
+			display: flex;
+			flex-wrap: wrap;
+			justify-content: space-around;
+			align-items: center;  
+		}
+
+		.chart {
+			width: 200px;
+			height: 200px;
+			background-color: #80c0ed;
+		}
+		.chart_group {
+			display: flex;
+			flex-wrap: wrap;
+			background-color: black;
+			justify-content: center;
+		}
+		.chart_group > .chart {
+			border: 1px solid black;
+		}
+	</style>
+</head> 
+<body>
+
+<main>
+	<header>
+		<h1>Header</h1>
+	</header>
+	<div class="container">
+		<div class="form">
+			<div>
+				a <input />
+			</div>
+			<div>
+				b <input />
+			</div>
+			<div>
+				c <input />
+			</div>
+		</div>
+		<div class="chart_container">
+			<div class="chart">
+			</div>
+			<div class="chart_group">
+				<div class="chart">
+				</div>
+				<div class="chart">
+				</div>
+			</div>
+			<div class="chart">
+			</div>
+			<div class="chart">
+			</div>
+			<div class="chart">
+			</div>
+		</div>
+		<div class="vl">
+		</div>
+	</div>
+	<footer>
+		<h1>Footer</h1>
+	</footer>
+</main>
+
+</body>
+</html>
