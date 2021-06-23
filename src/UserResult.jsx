@@ -39,14 +39,17 @@ const useStyles = makeStyles((theme) => ({
   },
   card:{
     height:'20vh',
-    maxWidth: '420px',
+    width: 'calc(20vh * 2.5)',
+    maxWidth: 'calc((100vw - 316px)/2)',
     '@media (max-width: 960px)':{
-      height: 'unset'
+      height: 'unset',
+      width: 'unset',
+      maxWidth: 'unset'
     }
   },
   x2Card:{
     height:'20vh',
-    overflow: 'scroll',
+    overflowY: 'scroll',
     wordBreak:'break-all',
     '@media (max-width: 960px)':{
       height: 'unset'
