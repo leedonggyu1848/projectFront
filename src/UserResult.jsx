@@ -3,6 +3,8 @@ import { makeStyles } from "@material-ui/core";
 import ReactApexChart from "react-apexcharts";
 import { Grid } from "@material-ui/core";
 
+//임시 데이터
+
 const useStyles = makeStyles((theme) => ({
   userResult:{
     width: 'calc(100vw - 256px)',
