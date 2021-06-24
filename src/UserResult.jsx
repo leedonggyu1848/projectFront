@@ -20,7 +20,6 @@ const useStyles = makeStyles((theme) => ({
       position: 'unset',
       width: '100vw',
       height: 'unset',
-      position: 'unset',
       left: 'unset',
       overflow:'unset'
     }
