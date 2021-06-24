@@ -17,19 +17,21 @@ const useStyle = makeStyles({
    const [useHeight, setHeight] = useRecoilState(userHeight);
    const [useWeight, setWeight] = useRecoilState(userWeight);
    const [useSection, setSection] = useRecoilState(userSection);
-
+   //atom의 height, weight, section과 사용자 입력을 연결시킴
+   //InputFormat은 숫자만 받을 수 있게 한다.
+   //받은 값을 float로 바꾸고 바꿀수 없다면 0을 반환한다. (12.12aa -> 12.12 같은 방식)
    return(
       <div className={classes.formInfo}>
         <InputFormat content='키' 
-          onChange={(e)=>{setHeight(e.target.value)}} 
+          onChange={(e)=>{setHeight(parseFloat(e.target.value) || 0)}} 
           value={useHeight}/>
         <br/>
         <InputFormat content='몸무게' 
-          onChange={(e)=>{setWeight(e.target.value)}} 
+          onChange={(e)=>{setWeight(parseFloat(e.target.value) || 0)}} 
           value={useWeight}/>
         <br/> 
         <InputFormat content='부대' 
-          onChange={(e)=>{setSection(e.target.value)}} 
+          onChange={(e)=>{setSection(parseFloat(e.target.value) || 0)}} 
           value={useSection}/>
       </div>
    )
