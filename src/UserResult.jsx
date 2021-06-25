@@ -1,7 +1,11 @@
 import React from "react";
+import { useRecoilValue } from "recoil";
 import { makeStyles } from "@material-ui/core";
 import ReactApexChart from "react-apexcharts";
 import { Grid } from "@material-ui/core";
+import { userBmi } from "./selector";
+
+//임시 데이터
 
 const useStyles = makeStyles((theme) => ({
   userResult:{
@@ -59,154 +63,164 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-const data = {
-  bar:{
-    series: [{
-      name: 'Inflation',
-      data: [2.3, 3.1, 4.0, 10.1, 4.0, 3.6, 3.2, 2.3, 1.4, 0.8, 0.5, 0.2]
-    }],
-    options: {
-      annotations: {
-        points: [{
-          x: 'May',
-          seriesIndex: 0,
-          label: {
-            borderColor: '#775DD0',
-            offsetY: 0,
-            style: {
-              color: '#fff',
-              background: '#775DD0',
-            },
-            text: 'yours',
-          }
-        }],
-      },
-      chart: {
-        type: 'bar',
-      },
-      plotOptions: {
-        bar: {
-          borderRadius: 10,
-          dataLabels: {
-            position: 'top', // top, center, bottom
-          },
-        }
-      },
-      dataLabels: {
-        enabled: true,
-        formatter: (val) => {
-          return val + "%";
-        },
-        offsetY: 20,
-        style: {
-          fontSize: '12px',
-          colors: ["#304758"]
-        }
-      },
-      
-      xaxis: {
-        categories: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
-        position: 'top',
-        axisBorder: {
-          show: false
-        },
-        axisTicks: {
-          show: false
-        },
-        crosshairs: {
-          fill: {
-            type: 'gradient',
-            gradient: {
-              colorFrom: '#D8E3F0',
-              colorTo: '#BED1E6',
-              stops: [0, 100],
-              opacityFrom: 0.4,
-              opacityTo: 0.5,
-            }
-          }
-        },
-        tooltip: {
-          enabled: true,
-        }
-      },
-      yaxis: {
-        axisBorder: {
-          show: false
-        },
-        axisTicks: {
-          show: false,
-        },
-        labels: {
-          show: false,
-          formatter: function (val) {
-            return val + "%";
-          }
-        }
-      
-      },
-    },
-  },
-  radial: {
-    series: [100],
-    options: {
-      chart: {
-        type: 'radialBar',
-        offsetY: -20,
-        sparkline: {
-          enabled: true
-        }
-      },
-      plotOptions: {
-        radialBar: {
-          startAngle: -90,
-          endAngle: 90,
-          track: {
-            background: "#e7e7e7",
-            strokeWidth: '97%',
-            margin: 5, // margin is in pixels
-            dropShadow: {
-              enabled: true,
-              top: 2,
-              left: 0,
-              color: '#999',
-              opacity: 1,
-              blur: 2
-            }
-          },
-          dataLabels: {
-            name: {
-              show: false
-            },
-            value: {
-              offsetY: -2,
-              fontSize: '22px'
-            }
-          }
-        }
-      },
-      grid: {
-        padding: {
-          top: -10
-        }
-      },
-      fill: {
-        type: 'gradient',
-        gradient: {
-          shadeIntensity: 0.4,
-          inverseColors: false,
-          opacityFrom: 1,
-          opacityTo: 1,
-          colors:['#000000', '#FFFFFF'],
-          stops: [0, 50, 100]
-        },
-      },
-      labels: ['Average Results'],
-    },  
-  }
+//차트에 표현할 값을 리턴합니다
+//val: array
+function radialFormatter(val){
+  return val.globals.seriesTotals[0]
 }
 
 function UserResult(){
   const classes = useStyles();
+  const bmi = useRecoilValue(userBmi)
+  const data = {
+    bar:{
+      series: [{
+        name: 'Inflation',
+        data: [2.3, 3.1, 4.0, 10.1, 4.0, 3.6, 3.2, 2.3, 1.4, 0.8, 0.5, 0.2]
+      }],
+      options: {
+        annotations: {
+          points: [{
+            x: 'May',
+            seriesIndex: 0,
+            label: {
+              borderColor: '#775DD0',
+              offsetY: 0,
+              style: {
+                color: '#fff',
+                background: '#775DD0',
+              },
+              text: 'yours',
+            }
+          }],
+        },
+        chart: {
+          type: 'bar',
+        },
+        plotOptions: {
+          bar: {
+            borderRadius: 10,
+            dataLabels: {
+              position: 'top', // top, center, bottom
+            },
+          }
+        },
+        dataLabels: {
+          enabled: true,
+          formatter: (val) => {
+            return val + "%";
+          },
+          offsetY: 20,
+          style: {
+            fontSize: '12px',
+            colors: ["#304758"]
+          }
+        },
+        
+        xaxis: {
+          categories: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+          position: 'top',
+          axisBorder: {
+            show: false
+          },
+          axisTicks: {
+            show: false
+          },
+          crosshairs: {
+            fill: {
+              type: 'gradient',
+              gradient: {
+                colorFrom: '#D8E3F0',
+                colorTo: '#BED1E6',
+                stops: [0, 100],
+                opacityFrom: 0.4,
+                opacityTo: 0.5,
+              }
+            }
+          },
+          tooltip: {
+            enabled: true,
+          }
+        },
+        yaxis: {
+          axisBorder: {
+            show: false
+          },
+          axisTicks: {
+            show: false,
+          },
+          labels: {
+            show: false,
+            formatter: function (val) {
+              return val + "%";
+            }
+          }
+        
+        },
+      },
+    },
+    radial: {
+      series: [bmi],
+      options: {
+        chart: {
+          type: 'radialBar',
+          offsetY: -20,
+          sparkline: {
+            enabled: true
+          }
+        },
+        plotOptions: {
+          radialBar: {
+            startAngle: -90,
+            endAngle: 90,
+            track: {
+              background: "#e7e7e7",
+              strokeWidth: '97%',
+              margin: 5, // margin is in pixels
+              dropShadow: {
+                enabled: true,
+                top: 2,
+                left: 0,
+                color: '#999',
+                opacity: 1,
+                blur: 2
+              }
+            },
+            dataLabels: {
+              name: {
+                show: false
+              },
+              value: {
+                offsetY: -2,
+                fontSize: '22px'
+              },
+              total:{
+                show:true,
+                formatter: radialFormatter
+              }
+            }
+          }
+        },
+        grid: {
+          padding: {
+            top: -10
+          }
+        },
+        fill: {
+          type: 'gradient',
+          gradient: {
+            shadeIntensity: 0.4,
+            inverseColors: false,
+            opacityFrom: 1,
+            opacityTo: 1,
+            colors:['#000000', '#FFFFFF'],
+            stops: [0, 35]
+          },
+        },
+        labels: ['Average Results'],
+      },  
+    }
+  }
   return (
     <div className={classes.userResult}>
       <Grid container spacing={1} className={classes.mainContents}>

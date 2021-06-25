@@ -5,6 +5,7 @@ html body{
 body{
   background-color: #F5F5F5;
 }
+/*왼쪽의 사이드 바(256px) 오른쪽은 마진으로 채움*/
 main {
   height: 100%;
   background-color: white;
@@ -19,15 +20,16 @@ main {
   flex-direction: column;
   justify-content: space-between;
 }
-
-* {
-  box-sizing:  border-box;
-}
-
+/*크기가 xs(600px)이 되면 오른쪽 마진이 사라지고
+**flex형태로 contets가 column방향으로 나열됨*/
 @media (max-width: 600px){
   main{
     margin-right: 0;
     width: 100vw;
     height: unset
   }
+}
+
+* {
+  box-sizing:  border-box;
 }
