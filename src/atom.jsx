@@ -1,17 +1,17 @@
 import { atom } from "recoil";
 
 // 키 정보
-//default: number;
+//default: number; 173(남자 평균 키)
 const userHeight = atom({
   key: 'userHeight',
-  default: 0
+  default: 173
 })
 
 // 몸무게 정보
-//default: number;
+//default: number; 68(남자 평균 몸무게), 0이면 오류메세지 생김
 const userWeight = atom({
   key:'userWeight',
-  default: 0
+  default: 68
 })
 
 // 부대 정보
