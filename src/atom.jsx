@@ -15,7 +15,7 @@ const userWeight = atom({
 // 부대 정보
 const userSection = atom({
   key: 'userSection',
-  default: 8623
+  default: '8623'
 })
 
 export {userHeight, userWeight, userSection};
