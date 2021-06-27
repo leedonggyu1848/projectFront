@@ -258,6 +258,14 @@ function UserResult(){
               <ReactApexChart options={data.radial.options} series={data.radial.series} type="radialBar" />
             </div>
         </Grid>
+
+        <Grid item md={6} sm={12}>
+          <div className={classes.card}>
+            bmi
+            <ReactApexChart options={data.bar.options} series={data.bar.series} type="bar" />
+          </div>
+        </Grid>
+        
         <Grid item md={6} sm={12} >
           <div className={classes.card}>
             키
@@ -273,12 +281,7 @@ function UserResult(){
           </div>
         </Grid>
 
-        <Grid item md={6} sm={12}>
-          <div className={classes.card}>
-            bmi
-            <ReactApexChart options={data.bar.options} series={data.bar.series} type="bar" />
-          </div>
-        </Grid>
+
       </Grid>
     </div>
   )
