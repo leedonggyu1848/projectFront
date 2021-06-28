@@ -10,12 +10,28 @@ function percentageToBmi(val){
   return val / 100 * 35
 }
 
+function weightState(bmi){
+  if(bmi <= 18.5){
+    return '저체중';
+  }else if(bmi <= 23){
+    return '정상';
+  }else if(bmi <= 25){
+    return '과체중';
+  }else if(bmi <= 30){
+    return '비만';
+  }else{
+    return '고도비만';
+  }
+}
+
+
 // 차트에 표현할 값을 리턴합니다
 // bmi의 최대값을 35로 만들기 위해서 값을 변환시킵니다
 // bmi를 그대로 넣으면 퍼센트로 들어가서 최대값이 100이됩니다
 // val: array
 function radialFormatter(val){
-  return percentageToBmi(val.globals.seriesTotals[0]);
+  const bmi = percentageToBmi(val.globals.seriesTotals[0]);
+  return bmi + ' [ ' + weightState(bmi) + ' ]';
 }
 
 // bmi별 색상을 결정합니다
