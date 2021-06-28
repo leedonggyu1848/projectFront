@@ -4,7 +4,7 @@ import json
 def getRankList(series, n):
   rankList = []
   cur = series.min()
-  while cur < series.max():
+  while cur <= series.max():
     cur += (series.max() - series.min())/n
     rankList.append(cur)
   return rankList
@@ -13,7 +13,7 @@ def ranking(data, rankList):
   for index, element in enumerate(rankList):
     if data < element:
       return index
-    elif index == len(rankList) - 1:
+    elif index == len(rankList) - 2:
       return index
 
 def getCountingList(series, n):
@@ -27,6 +27,7 @@ def getCountingList(series, n):
   return countingList
 
 if __name__ == '__main__':
+  N = 10
   with open('./육군 신체측정 데이터(수시 업데이터).json', 'r', encoding='utf-8') as j:
     data = json.load(j)
   df = pd.DataFrame(data['DATA'])
@@ -40,7 +41,7 @@ if __name__ == '__main__':
   result = result[result['weight'] != 0]
   dic={}
   for index in result:
-      dic[index] = {'rank': getRankList(result[index], 15),'result': getCountingList(result[index], 15)}
+      dic[index] = {'rank': getRankList(result[index], N),'result': getCountingList(result[index], N)}
   with open('./src/processedData.json', 'w') as f:
       f.write(json.dumps(dic, indent=2))
   print('complete')
