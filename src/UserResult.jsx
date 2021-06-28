@@ -63,10 +63,40 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-//차트에 표현할 값을 리턴합니다
-//val: array
+// bmi값을 차트에 맞는 퍼센트 값으로 바꿉니다.
+//val: number
+function bmiToPercentage(val){
+  return val / 35 * 100
+}
+
+// bmi값을 차트에 맞는 퍼센트 값으로 바꿉니다.
+// val: number
+function percentageToBmi(val){
+  return val / 100 * 35
+}
+
+// 차트에 표현할 값을 리턴합니다
+// bmi의 최대값을 35로 만들기 위해서 값을 변환시킵니다
+// bmi를 그대로 넣으면 퍼센트로 들어가서 최대값이 100이됩니다
+// val: array
 function radialFormatter(val){
-  return val.globals.seriesTotals[0]
+  return percentageToBmi(val.globals.seriesTotals[0]);
+}
+
+// bmi별 색상을 결정합니다
+// TODO: 색을 연속적으로 바꾸는것도 생각해볼만하다
+function fillColors({ value }) {
+  if(value < bmiToPercentage(18.5)) {
+      return '#95DA74'
+  } else if (value < bmiToPercentage(23)) {
+      return '#61DBC3'
+  } else if (value < bmiToPercentage(25)){
+      return '#FAD375'
+  } else if (value < bmiToPercentage(30)){
+    return '#EB656F'
+  } else{
+    return '#FF0000'
+  }
 }
 
 function UserResult(){
@@ -160,7 +190,7 @@ function UserResult(){
       },
     },
     radial: {
-      series: [bmi],
+      series: [bmiToPercentage(bmi)],
       options: {
         chart: {
           type: 'radialBar',
@@ -207,15 +237,7 @@ function UserResult(){
           }
         },
         fill: {
-          type: 'gradient',
-          gradient: {
-            shadeIntensity: 0.4,
-            inverseColors: false,
-            opacityFrom: 1,
-            opacityTo: 1,
-            colors:['#000000', '#FFFFFF'],
-            stops: [0, 35]
-          },
+          colors: [fillColors]
         },
         labels: ['Average Results'],
       },  
@@ -236,6 +258,14 @@ function UserResult(){
               <ReactApexChart options={data.radial.options} series={data.radial.series} type="radialBar" />
             </div>
         </Grid>
+
+        <Grid item md={6} sm={12}>
+          <div className={classes.card}>
+            bmi
+            <ReactApexChart options={data.bar.options} series={data.bar.series} type="bar" />
+          </div>
+        </Grid>
+        
         <Grid item md={6} sm={12} >
           <div className={classes.card}>
             키
@@ -251,12 +281,7 @@ function UserResult(){
           </div>
         </Grid>
 
-        <Grid item md={6} sm={12}>
-          <div className={classes.card}>
-            bmi
-            <ReactApexChart options={data.bar.options} series={data.bar.series} type="bar" />
-          </div>
-        </Grid>
+
       </Grid>
     </div>
   )
