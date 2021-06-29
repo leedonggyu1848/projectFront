@@ -1,7 +1,9 @@
 import { useRecoilValue, useRecoilState } from "recoil";
 import { userSection } from "./atom";
+import { useEffect, useState } from "react";
 import { dateMenu } from "./menuAtom";
 import axios from "axios";
+import { datePickerDefaultProps } from "@material-ui/pickers/constants/prop-types";
 
 const sectionCode={
   '육군훈련소': 15069402,
@@ -28,35 +30,33 @@ function getSchemaUrl(section){
   return url + '&serviceKey=' + process.env.REACT_APP_ENCODING;
 }
 
-function reducer(state, action){
-  if(action){
-    state=true;
-    return state;
-  }else{
-    state=false;
-    return state;
-  }
-}
-
-function getMenuData(section){
-  axios.get(getSchemaUrl(section))
-    .then((res) => {
-      const dataPhath = Object.keys(res.data.paths)[0];
-      return axios.get(apiUrl + dataPhath + '?serviceKey=' + process.env.REACT_APP_ENCODING)
-    })
-    .then((res) => {
-      console.log(res);
-    })
+async function getMenuData(section){
+  const schema = await axios.get(getSchemaUrl(section))
+  const dataPhath = Object.keys(schema.data.paths)[0];
+  const dataRes = await axios.get(apiUrl + dataPhath + '?serviceKey=' + process.env.REACT_APP_ENCODING)
+  return dataRes.data;
 }
 
 export default function MenuInfo(props){
-  const state=false;
-  const section = useRecoilValue(userSection);  
+  const [myState, setMyState] = useState(false);
+  const section = useRecoilValue(userSection);
+  const [data, setData] = useState('null');
   getMenuData(section)
-  if (state){
+
+  useEffect(()=>{
+    setMyState(false);
+    (async ()=>{
+      let data = await getMenuData(section);
+      setData(data.data[0]['석식']);
+      console.log(data.data);
+      setMyState(true);
+    })();
+  }, [section, setMyState, setData])
+
+  if (myState){
     return(
       <div>
-        <span>Info</span>
+        <span>{data}</span> 
       </div>
     )
   }else{
