@@ -1,9 +1,7 @@
 import { useRecoilValue, useRecoilState } from "recoil";
 import { userSection } from "./atom";
 import { useEffect, useState } from "react";
-import { dateMenu } from "./menuAtom";
 import axios from "axios";
-import { datePickerDefaultProps } from "@material-ui/pickers/constants/prop-types";
 
 const sectionCode={
   '육군훈련소': 15069402,
@@ -23,32 +21,44 @@ const sectionCode={
   '7652': null
 };
 
+//schema base url
+const schemaUrl = 'https://infuser.odcloud.kr/oas/docs'
+
+//api base url
 const apiUrl = 'https://api.odcloud.kr/api'
 
+//section에 맞는 url을 넘겨줍니다.
 function getSchemaUrl(section){
-  const url = 'https://infuser.odcloud.kr/oas/docs?namespace='+sectionCode[section]+'/v1';
+  const url = schemaUrl + '?namespace='+ sectionCode[section]+'/v1';
   return url + '&serviceKey=' + process.env.REACT_APP_ENCODING;
 }
 
+//section의 메뉴 데이터를 넘겨줍니다
+//비동기함수 입니다.
 async function getMenuData(section){
   const schema = await axios.get(getSchemaUrl(section))
+  console.log(schema);
   const dataPhath = Object.keys(schema.data.paths)[0];
-  const dataRes = await axios.get(apiUrl + dataPhath + '?serviceKey=' + process.env.REACT_APP_ENCODING)
+  const dataRes = await axios.get(apiUrl + dataPhath + 
+      '?serviceKey=' + process.env.REACT_APP_ENCODING + '&perPage=1000')
   return dataRes.data;
 }
 
+
 export default function MenuInfo(props){
+  //api 요청이 끝났는지 확인을 위한 변수
   const [myState, setMyState] = useState(false);
+  //섹션
   const section = useRecoilValue(userSection);
+  //받은 데이터
   const [data, setData] = useState('null');
-  getMenuData(section)
 
   useEffect(()=>{
     setMyState(false);
     (async ()=>{
       let data = await getMenuData(section);
       setData(data.data[0]['석식']);
-      console.log(data.data);
+      console.log(data);
       setMyState(true);
     })();
   }, [section, setMyState, setData])
