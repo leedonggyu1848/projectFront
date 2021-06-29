@@ -1,5 +1,5 @@
 import { selector } from "recoil";
-import { userHeight, userWeight } from "./atom";
+import { userHeight, userWeight, userSection } from "./atom";
 
 const userBmi = selector({
   key:'userBmi',

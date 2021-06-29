@@ -1,12 +1,15 @@
 import React from "react";
-import { useRecoilValue } from "recoil";
+import { useRecoilValue, useRecoilState } from "recoil";
 import { makeStyles } from "@material-ui/core";
 import ReactApexChart from "react-apexcharts";
 import { Grid } from "@material-ui/core";
 import { userBmi } from "./selector";
-import { userWeight, userHeight } from "./atom";
+import { userWeight, userHeight, userSection } from "./atom";
 import getBarChartDatas from "./getBarChartDatas";
 import getRadialChartData from "./getRadialChartData";
+import { TextField } from "@material-ui/core";
+import { dateMenu } from "./menuAtom";
+import MenuInfo from "./MenuInfo";
 
 const useStyles = makeStyles((theme) => ({
   userResult:{
@@ -51,17 +54,6 @@ const useStyles = makeStyles((theme) => ({
       maxWidth: 'unset'
     }
   },
-  x2Card:{
-    height:'20vh',
-    overflowY: 'scroll',
-    wordBreak:'break-all',
-    '@media (max-width: 960px)':{
-      height: 'unset'
-    },
-    '@media (max-width:600px)':{
-      overflow: 'unset'
-    }
-  }
 }));
 
 function UserResult(){
@@ -71,16 +63,40 @@ function UserResult(){
     height: useRecoilValue(userHeight),
     weight: useRecoilValue(userWeight)
   }
+  const section = useRecoilValue(userSection);
   const bar = getBarChartDatas(userData);
   const radial = getRadialChartData(userData.bmi);
+
+  const [date, setDate] = useRecoilState(dateMenu);
+  function handleDateChange(e){
+    setDate(e.target.value);
+  }
+
   return (
     <div className={classes.userResult}>
       <Grid container spacing={1} className={classes.mainContents}>
-        <Grid item md={12} sm={12}>
-          <div className={classes.x2Card}>
-            식단, 칼로리
-            hellohellohellohehellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellollohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohello
-          </div>
+        <Grid item md={6} sm={12} >
+            <div className={classes.card}>
+            <form noValidate>
+              <TextField
+                id="date"
+                label="날짜"
+                type="date"
+                value={date}
+                onChange={handleDateChange}
+                InputLabelProps={{
+                  shrink: true,
+                }}
+              />
+              <MenuInfo date={date} section={section}/>
+            </form>
+            </div>
+        </Grid>
+
+        <Grid item md={6} sm={12} >
+            <div className={classes.card}>
+              aa
+            </div>
         </Grid>
         
         <Grid item md={6} sm={12} >
