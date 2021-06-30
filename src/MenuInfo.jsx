@@ -36,43 +36,67 @@ function getSchemaUrl(section){
 //section의 메뉴 데이터를 넘겨줍니다
 //비동기함수 입니다.
 async function getMenuData(section){
-  const schema = await axios.get(getSchemaUrl(section))
-  console.log(schema);
+  let schema;
+  let dataRes;
+
+  try{
+    schema = await axios.get(getSchemaUrl(section))
+  }catch(e){
+    console.log(e, 'schema error');
+    throw(e);
+  }
   const dataPhath = Object.keys(schema.data.paths)[0];
-  const dataRes = await axios.get(apiUrl + dataPhath + 
+  try{
+    dataRes = await axios.get(apiUrl + dataPhath + 
       '?serviceKey=' + process.env.REACT_APP_ENCODING + '&perPage=1000')
+  }catch(e){
+    console.log(e, 'api error');
+    throw(e);
+  }
   return dataRes.data;
 }
 
-
 export default function MenuInfo(props){
   //api 요청이 끝났는지 확인을 위한 변수
-  const [myState, setMyState] = useState(false);
+  const [apiState, setApiState] = useState(0);
   //섹션
   const section = useRecoilValue(userSection);
   //받은 데이터
   const [data, setData] = useState('null');
 
+  //section이 바뀌면 실행됩니다.
+  //console에 data를 출력하는 부분은 완성되면 지워야 합니다.
   useEffect(()=>{
-    setMyState(false);
+    setApiState(0);
     (async ()=>{
-      let data = await getMenuData(section);
-      setData(data.data[0]['석식']);
-      console.log(data);
-      setMyState(true);
+      try{
+        let data = await getMenuData(section);
+        setData(data.data[0]['석식']);
+        console.log(data);
+        setApiState(1);
+      }catch(e){
+        console.log(e)
+        setApiState(2);
+      }
     })();
-  }, [section, setMyState, setData])
+  }, [section, setApiState, setData])
 
-  if (myState){
+  if (apiState === 0){
+    return(
+      <div>
+      <span>loading...</span>
+      </div>
+    )
+  }else if(apiState === 1){
     return(
       <div>
         <span>{data}</span> 
       </div>
     )
-  }else{
+  }else if(apiState === 2){
     return(
       <div>
-        <span>loading...</span>
+        <span>error!</span>
       </div>
     )
   }
