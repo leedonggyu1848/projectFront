@@ -15,6 +15,14 @@ function InputFormat(props){
   )
 }
 
+function format(armyNumber) {
+  if (parseInt(armyNumber)) {
+    return '제'+armyNumber+'부대';
+  } else {
+    return armyNumber;
+  }
+}
+
 /* props:{
 **  content: string; 폼 컨트롤에 대한 설명
 **  value: string; 기본값
@@ -27,7 +35,7 @@ function SelectFormat(props){
     <FormControl>
       <InputLabel>{props.content}</InputLabel>
       <Select value={props.value} onChange={props.onChange}>
-        {props.items.map((item)=>(<MenuItem key={item} value={item}>{item}</MenuItem>))}
+        {props.items.map((item)=>(<MenuItem key={item} value={item}>{format(item)}</MenuItem>))}
       </Select>
     </FormControl>
   )

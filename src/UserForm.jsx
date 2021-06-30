@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import {InputFormat, SelectFormat} from "./InputFormat";
 import { makeStyles } from "@material-ui/core";
-import { useRecoilState } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import { userHeight, userWeight, userSection } from "./atom";
+import { shouldBmrBeDefault, userBmr } from "./selector";
 
 const useStyle = makeStyles({
   formInfo: {
@@ -24,6 +25,16 @@ function onNumberInputEvent(formSetter, recoilSetter) {
     if (newValue) {
       recoilSetter(newValue);
     }
+  }
+}
+
+// parseFloat 한 결과를 갖다 박습니다..
+function onNullableNumberInput(formSetter, recoilSetter) {
+  return (event) => {
+    const input = event.target.value;
+    formSetter(input);
+    const newValue = parseFloat(input);
+    recoilSetter(newValue);
   }
 }
 
@@ -52,23 +63,29 @@ export default function UserForm(){
   const [height, setHeight] = useRecoilState(userHeight);
   const [weight, setWeight] = useRecoilState(userWeight);
   const [section, setSection] = useRecoilState(userSection);
+  const [bmr, setBmr] = useRecoilState(userBmr);
+  const shouldUseDefaultBmr = useRecoilValue(shouldBmrBeDefault);
   const [heightInput, setHeightInput] = useState(height);
   const [weightInput, setWeightInput] = useState(weight);
   const [sectionInput, setSectionInput] = useState(section);
+  const [bmrInput, setBmrInput] = useState(bmr);
   return (
     <div className={classes.formInfo}>
-      <InputFormat content='키(cm)'
+      <InputFormat content="키(cm)"
                    onChange={onNumberInputEvent(setHeightInput, setHeight)}
                    value={heightInput} />
       <br />
-      <InputFormat content='몸무게(kg)'
+      <InputFormat content="몸무게(kg)"
                    onChange={onNumberInputEvent(setWeightInput, setWeight)}
                    value={weightInput} />
       <br />
-      <SelectFormat content='부대'
+      <SelectFormat content="표준식단부대"
                     onChange={onSelectEvent(setSectionInput, setSection)}
                     value={sectionInput}
                     items={availableSections} />
+      <InputFormat content="기초대사량(kcal)"
+                   onChange={onNullableNumberInput(setBmrInput, setBmr)}
+                   value={shouldUseDefaultBmr? bmr: bmrInput} />
     </div>
   )
 };
