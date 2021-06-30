@@ -1,12 +1,12 @@
 import { selector } from "recoil";
-import { userHeight, userWeight } from "./atom";
+import { userHeight, userWeight, userSection } from "./atom";
 
 const userBmi = selector({
   key:'userBmi',
   get: ({get}) => {
     const height = get(userHeight) / 100;
     const weight = get(userWeight);
-    if (height == 0) {
+    if (height === 0) {
       return 0;
     }
     return Math.round(weight/(height*height)*100)/100;
