@@ -28,7 +28,7 @@ function onNumberInputEvent(formSetter, recoilSetter) {
   }
 }
 
-// parseInt 한 결과를 갖다 박습니다..
+// parseFloat 한 결과를 갖다 박습니다..
 function onNullableNumberInput(formSetter, recoilSetter) {
   return (event) => {
     const input = event.target.value;
