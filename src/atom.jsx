@@ -21,4 +21,13 @@ const userSection = atom({
   default: '8623'
 });
 
-export {userHeight, userWeight, userSection};
+// 기초대사량
+// default: number | undefined;
+// 이 아톰은 오직 userBmr 셀렉터를 통해 접근되어야 한다.
+const userBmrValue = atom({
+  key: 'userBmrValue',
+  default: null
+});
+
+
+export {userHeight, userWeight, userSection, userBmrValue};
