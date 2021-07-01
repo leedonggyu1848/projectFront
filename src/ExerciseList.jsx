@@ -5,7 +5,8 @@ import { makeStyles } from "@material-ui/styles";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faWalking, faRunning, 
         faMountain, faFutbol, 
-        faSwimmer, faBasketballBall} from "@fortawesome/free-solid-svg-icons";
+        faSwimmer, faBasketballBall,
+        faBiking, faBuilding} from "@fortawesome/free-solid-svg-icons";
 const useStyle = makeStyles({
   exercise: {
     padding: '2px'
@@ -27,6 +28,8 @@ export default function ExerciseList(){
     '등산': {Coefficient: 1.5, icon: faMountain},
     '농구': {Coefficient: 2.1, icon: faBasketballBall},
     '수영': {Coefficient: 2.0, icon: faSwimmer},
+    '자전거타기(15~20km/hr)': {Coefficient: 1.5, icon: faBiking},
+    '계단오르기': {Coefficient: 1.6, icon: faBuilding},
   }
 
   class IconAndText{
