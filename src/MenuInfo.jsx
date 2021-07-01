@@ -1,9 +1,10 @@
-import { useRecoilValue, useRecoilState } from "recoil";
+import { useRecoilValue, useRecoilState} from "recoil";
 import { userSection } from "./atom";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { AppBar, Tabs, Tab, Box, Typography } from "@material-ui/core";
+import { Tabs, Tab, Box, Typography } from "@material-ui/core";
 import { makeStyles } from "@material-ui/styles";
+import { menuCalorie } from "./menuAtom";
 
 const sectionCode={
   '육군훈련소': 15069402,
@@ -33,13 +34,17 @@ const useStyles = makeStyles((theme) => ({
   tabs: {
     borderRight: `1px solid`,
   },
-}));
+})); 
 
 // schema base url
-const schemaUrl = 'https://infuser.odcloud.kr/oas/docs'
+const schemaUrl = 'https://infuser.odcloud.kr/oas/docs';
 
 // api base url
-const apiUrl = 'https://api.odcloud.kr/api'
+const apiUrl = 'https://api.odcloud.kr/api';
+
+function roundSecondPoint(num){
+  return Math.round(num*100)/100;
+}
 
 // section에 맞는 url을 넘겨줍니다.
 function getSchemaUrl(section){
@@ -74,7 +79,7 @@ async function getMenuData(section){
 class Trash {
   constructor(menu, calorie) {
     this.menu = menu;
-    this.calorie = calorie
+    this.calorie = calorie;
   }
 }
 
@@ -82,31 +87,37 @@ class Trash {
 class TrashBag {
   constructor() {
     this.breakfastMenus = [];
+    this.breakfastCalorie = 0;
     this.lunchMenus     = [];
+    this.lunchCalorie = 0;
     this.dinnerMenus    = [];
+    this.dinnerColorie = 0;
     this.overallCalorie = 0;
   }
   addBreakfast(aTrash) {
     if (aTrash.menu) {
       this.breakfastMenus.push(aTrash);
+      this.breakfastCalorie += aTrash.calorie;
     }
     return this;
   }
   addLunch(aTrash) {
     if (aTrash.menu) {
       this.lunchMenus.push(aTrash);
+      this.lunchCalorie += aTrash.calorie;
     }
     return this;
   }
   addDinner(aTrash) {
     if (aTrash.menu) {
       this.dinnerMenus.push(aTrash);
+      this.dinnerColorie += aTrash.calorie;
     }
     return this;
   }
-  addCalorie(calorie) {
-    if (calorie)
-      this.overallCalorie += calorie;
+  addTotalCalorie() {
+    this.overallCalorie = 0;
+    this.overallCalorie += this.breakfastCalorie + this.lunchCalorie + this.dinnerColorie;
     return this;
   }
 };
@@ -116,12 +127,12 @@ function trashBagFromMilitaryFormat(data) {
   for (const item of data) {
     trashBag
       .addBreakfast(
-        new Trash(item['조식'], parseFloat(item['조식열량'])))
+        new Trash(item['조식'], parseFloat(item['조식열량']) || 0))
       .addLunch(
-        new Trash(item['중식'], parseFloat(item['중식열량'])))
+        new Trash(item['중식'], parseFloat(item['중식열량']) || 0))
       .addDinner(
-        new Trash(item['석식'], parseFloat(item['석식열량'])))
-      .addCalorie(parseFloat(item['열량합계']) || 0);
+        new Trash(item['석식'], parseFloat(item['석식열량']) || 0))
+      .addTotalCalorie();
   }
   return trashBag;
 }
@@ -166,26 +177,25 @@ export default function MenuInfo(props){
   const section = useRecoilValue(userSection);
   //받은 데이터
   const [data, setData] = useState('null');
+  const [menuCal, setMenuCal] = useRecoilState(menuCalorie);
   let meal =  // 이건 그냥 예시입니다.
     new TrashBag()
       .addBreakfast(new Trash('전투식량1형', 1100))
       .addLunch(new Trash('전투식량2형', 1100))
       .addDinner(new Trash('군용쌀건빵', 450))
-      .addCalorie(2650);
+      .addTotalCalorie();
   //section이 바뀌면 실행됩니다.
   const [mealTab, setMealTab] = useState(0);
   const handleTabs = (event, newValue) => {
     setMealTab(newValue);
   };
-  //console에 data를 출력하는 부분은 완성되면 지워야 합니다.
+
   useEffect(() => {
     setApiState(0);
     const dropData = async () => {
       try {
         const data = await getMenuData(section);
         setData(data.data);
-        
-        console.log(data);
         setApiState(1);
       } catch (e) {
         console.log(e)
@@ -196,6 +206,7 @@ export default function MenuInfo(props){
   }, [section])
   
   if (apiState === 0) {
+    setMenuCal(0);
     return (
       <div>
         <span>loading...</span>
@@ -222,7 +233,7 @@ export default function MenuInfo(props){
     const dinnerElem = meal.dinnerMenus.map(
       (aTrash) => <li key={'동' + aTrash.menu}>{aTrash.menu}</li>
     );
-
+    setMenuCal(roundSecondPoint(meal.overallCalorie));
     return (
       
       <div className={classes.meals}>
@@ -240,12 +251,18 @@ export default function MenuInfo(props){
         </Tabs>
         <TabPanel value={mealTab} index={0}>
           {breakfastElem}
+          <li key='breakfastCal'>조식 칼로리:&nbsp;
+            <strong>{roundSecondPoint(meal.breakfastCalorie)}kcal</strong></li>
         </TabPanel>
         <TabPanel value={mealTab} index={1}>
           {lunchElem}
+          <li key='lunch'>중식 칼로리:&nbsp;
+            <strong>{roundSecondPoint(meal.lunchCalorie)}kcal</strong></li>
         </TabPanel>
         <TabPanel value={mealTab} index={2}>
           {dinnerElem}
+          <li key='dinner'>석식 칼로리:&nbsp;
+            <strong>{roundSecondPoint(meal.dinnerColorie)}kcal</strong></li>
         </TabPanel>
         {/* <div>
           <div>

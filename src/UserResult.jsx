@@ -10,6 +10,7 @@ import getRadialChartData from "./getRadialChartData";
 import { TextField } from "@material-ui/core";
 import { dateMenu } from "./menuAtom";
 import MenuInfo from "./MenuInfo";
+import ExerciseList from "./ExerciseList";
 
 const useStyles = makeStyles((theme) => ({
   userResult:{
@@ -95,7 +96,7 @@ function UserResult(){
 
         <Grid item md={6} sm={12} >
             <div className={classes.card}>
-              aa
+              <ExerciseList/>
             </div>
         </Grid>
         
