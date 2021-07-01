@@ -10,6 +10,7 @@ import getRadialChartData from "./getRadialChartData";
 import { TextField } from "@material-ui/core";
 import { dateMenu } from "./menuAtom";
 import MenuInfo from "./MenuInfo";
+import ExerciseList from "./ExerciseList";
 
 const useStyles = makeStyles((theme) => ({
   userResult:{
@@ -52,7 +53,7 @@ const useStyles = makeStyles((theme) => ({
       height: 'unset',
       width: 'unset',
       maxWidth: 'unset'
-    }
+    },
   },
 }));
 
@@ -75,7 +76,7 @@ function UserResult(){
   return (
     <div className={classes.userResult}>
       <Grid container spacing={1} className={classes.mainContents}>
-        <Grid item md={6} sm={12} >
+        <Grid item md={6} sm={12}>
             <div className={classes.card}>
             <form noValidate>
               <TextField
@@ -93,13 +94,13 @@ function UserResult(){
             </div>
         </Grid>
 
-        <Grid item md={6} sm={12} >
+        <Grid item md={6} sm={12}>
             <div className={classes.card}>
-              aa
+              <ExerciseList/>
             </div>
         </Grid>
         
-        <Grid item md={6} sm={12} >
+        <Grid item md={6} sm={12}>
             <div className={classes.card}>
               정상치
               <ReactApexChart options={radial.options} series={radial.series} type="radialBar" />
@@ -113,16 +114,16 @@ function UserResult(){
           </div>
         </Grid>
         
-        <Grid item md={6} sm={12} >
+        <Grid item md={6} sm={12}>
           <div className={classes.card}>
-            키
+            키 (cm)
             <ReactApexChart options={bar.height.options} series={bar.height.series} type="bar"/>
           </div>
         </Grid>
         
         <Grid item md={6} sm={12} >
           <div className={classes.card}>
-            몸무게
+            몸무게 (kg)
             <ReactApexChart options={bar.weight.options} series={bar.weight.series} type="bar" />
           </div>
         </Grid>

@@ -19,7 +19,7 @@ function getDataRank(rank, userData){
 function getBarChartData(data, userData){
   let categories = new Array(data.result.length);
   for (let i=0; i<data.result.length; ++i){
-    categories[i] = String(i+1);
+    categories[i] = Math.round((data.rank[i+1] + data.rank[i])/2)
   }
   return{
     series: [{

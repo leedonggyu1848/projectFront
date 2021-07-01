@@ -4,10 +4,10 @@ function bmiToPercentage(val){
   return val / 35 * 100
 }
 
-// bmi값을 차트에 맞는 퍼센트 값으로 바꿉니다.
+// 퍼센트값을 차트에 맞는 bmi 값으로 바꿉니다.
 // val: number
 function percentageToBmi(val){
-  return val / 100 * 35
+  return Math.round(val * 35)/100
 }
 
 function weightState(bmi){

@@ -7,4 +7,9 @@ const dateMenu = atom({
   default: '2021-05-24'
 });
 
-export{dateMenu};
+const menuCalorie = atom({
+  key: 'menuCalorie',
+  default: 0
+});
+
+export{dateMenu, menuCalorie};
