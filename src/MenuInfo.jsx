@@ -2,6 +2,8 @@ import { useRecoilValue, useRecoilState } from "recoil";
 import { userSection } from "./atom";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { AppBar, Tabs, Tab, Box, Typography } from "@material-ui/core";
+import { makeStyles } from "@material-ui/styles";
 
 const sectionCode={
   '육군훈련소': 15069402,
@@ -20,6 +22,18 @@ const sectionCode={
   '9030': 15069430,
   '7652': null
 };
+
+const useStyles = makeStyles((theme) => ({
+  meals: {
+    flexGrow: 1,
+    display: 'flex',
+    height: 224,
+    padding: '1px'
+  },
+  tabs: {
+    borderRight: `1px solid`,
+  },
+}));
 
 // schema base url
 const schemaUrl = 'https://infuser.odcloud.kr/oas/docs'
@@ -112,6 +126,32 @@ function trashBagFromMilitaryFormat(data) {
   return trashBag;
 }
 
+function TabPanel(props) {
+  const { children, value, index, ...other } = props;
+
+  return (
+    <div
+      role="tabpanel"
+      hidden={value !== index}
+      id={`wrapped-tabpanel-${index}`}
+      aria-labelledby={`wrapped-tab-${index}`}
+      {...other}
+    >
+      {value === index && (
+        <Box p={3}>
+          <Typography>{children}</Typography>
+        </Box>
+      )}
+    </div>
+  );
+}
+
+function a11yProps(index) {
+  return {
+    id: `wrapped-tab-${index}`,
+    'aria-controls': `wrapped-tabpanel-${index}`,
+  };
+}
 /*
   props: {
     date: string ("yyyy-mm-dd");
@@ -119,6 +159,7 @@ function trashBagFromMilitaryFormat(data) {
   }
  */
 export default function MenuInfo(props){
+    const classes = useStyles();
   //api 요청이 끝났는지 확인을 위한 변수
   const [apiState, setApiState] = useState(0);
   //섹션
@@ -132,7 +173,10 @@ export default function MenuInfo(props){
       .addDinner(new Trash('군용쌀건빵', 450))
       .addCalorie(2650);
   //section이 바뀌면 실행됩니다.
-
+  const [mealTab, setMealTab] = useState(0);
+  const handleTabs = (event, newValue) => {
+    setMealTab(newValue);
+  };
   //console에 data를 출력하는 부분은 완성되면 지워야 합니다.
   useEffect(() => {
     setApiState(0);
@@ -178,9 +222,32 @@ export default function MenuInfo(props){
     const dinnerElem = meal.dinnerMenus.map(
       (aTrash) => <li key={'동' + aTrash.menu}>{aTrash.menu}</li>
     );
+
     return (
-      <div>
-        <div>
+      
+      <div className={classes.meals}>
+        <Tabs
+          orientation="vertical"
+          variant="scrollable"
+          value={mealTab}
+          onChange={handleTabs}
+          aria-label="meals"
+          className={classes.tabs}
+        >
+          <Tab label="조식" {...a11yProps(0)} />
+          <Tab label="중식" {...a11yProps(1)} />
+          <Tab label="석식" {...a11yProps(2)} />
+        </Tabs>
+        <TabPanel value={mealTab} index={0}>
+          {breakfastElem}
+        </TabPanel>
+        <TabPanel value={mealTab} index={1}>
+          {lunchElem}
+        </TabPanel>
+        <TabPanel value={mealTab} index={2}>
+          {dinnerElem}
+        </TabPanel>
+        {/* <div>
           <div>
             조식
           </div>
@@ -206,7 +273,7 @@ export default function MenuInfo(props){
         </div>
         <div>
           총 칼로리는 {meal.overallCalorie}kcal 입니다.
-        </div>
+        </div> */}
       </div>
     )
   } else if (apiState === 2) {
