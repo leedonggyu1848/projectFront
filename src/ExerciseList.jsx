@@ -47,7 +47,7 @@ export default function ExerciseList(){
   return(
     <div className={classes.exercise}>
       <strong>오늘 총 칼로리 {menuCal}kcal를 소모하기 위해서는</strong>
-      <ul className={classes.exElem}>
+      <ul className={classes.exElem} style={{borderLeft:'1px solid', paddingLeft:'5px'}}>
       {exList.map((value) => <li key={value.text}>
         <FontAwesomeIcon icon={value.icon}/>{value.text}</li>)}
       </ul>
