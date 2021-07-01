@@ -115,14 +115,14 @@ function UserResult(){
         
         <Grid item md={6} sm={12} >
           <div className={classes.card}>
-            키
+            키 (cm)
             <ReactApexChart options={bar.height.options} series={bar.height.series} type="bar"/>
           </div>
         </Grid>
         
         <Grid item md={6} sm={12} >
           <div className={classes.card}>
-            몸무게
+            몸무게 (kg)
             <ReactApexChart options={bar.weight.options} series={bar.weight.series} type="bar" />
           </div>
         </Grid>
